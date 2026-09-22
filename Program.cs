@@ -28,7 +28,7 @@ namespace Backend_Core_with_RabbitMQ
 
             builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
 
-            // 2. Register Invoice Worker with safe Scoped DI access
+            // Register Invoice Worker with safe Scoped DI access
             builder.Services.AddHostedService(sp => new RabbitMQQueueWorker(
                 sp.GetRequiredService<RabbitMQConnectionManager>(),
                 sp.GetRequiredService<IServiceScopeFactory>(),
@@ -41,9 +41,7 @@ namespace Backend_Core_with_RabbitMQ
                     if (invoice != null)
                     {
                         Console.WriteLine($"Processing Invoice #{invoice.InvoiceId} for {invoice.CustomerName}");
-
                     }
-
                     // Safe to resolve EF Core DbContext here because of the scope!
                     // var db = scopedProvider.GetRequiredService<MyDbContext>();
                     await Task.CompletedTask;
